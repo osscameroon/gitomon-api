@@ -1,0 +1,44 @@
+<html>
+    <head>
+        Generate Gitomon Json
+    </head>
+    <body>
+        <div >
+            <input type="text" placeholder="author/project" id="target"/>
+            <input type="button" onclick="generate()" value="generate gitomon"/>
+        </div>
+
+        <code id="result"></code>
+        
+        <script type="text/javascript">
+            function generate() {
+                const target = document.getElementById("target").value
+                if (target.length == ''){
+                    alert('You need to provide a valid author/project')
+                    return;
+                }
+                const payload = {
+                    "author": target.split("/")[0],
+                    "repo": target.split("/")[1]
+                }
+
+                fetch('/generate',
+                    {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    }
+                )
+                .then((res) => res.json())
+                .then((data) => {
+                        console.log("data: ", data);
+                        document.getElementById("result").innerHTML = JSON.stringify(data);
+                    }
+                )
+            }
+        </script>
+    </body>
+</html>
